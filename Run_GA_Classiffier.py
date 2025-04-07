@@ -257,37 +257,6 @@ for k in clfs:
     print(ga_fe.get_bestInfo(miRNA_ID))
     print(print_clf_feas_met(ga_fe.support_, X_all, y_all, k)[0].T)
 
-# k = "RBF-SVM"
-# ga_fe = GAFeatureSelection(K=10, Tmax=50)
-# ga_fe.calc(X_all, y_all, clf=k, n_times=10, n_splits=10)
-# rst_dct[k] = ga_fe
-# print(ga_fe.get_bestInfo(miRNA_ID))
-# print(print_clf_feas_met(ga_fe.support_, X_all, y_all, k)[0].T)
-
-import pickle
-# with open("cache/ga_13clf_result_v12.pikcle","wb") as f:
-#     pickle.dump(rst_dct,f)
-
-# with open("cache/ga_13clf_result_v12.pikcle","rb") as f:
-#     rst_dct = pickle.load(f)
-    
-# lst = []
-# infotmp = []
-# for k in clfs:
-#     lst.append(print_clf_feas_met(rst_dct[k].support_, X_all, y_all, k,n_times=10)[0].T)
-#     infotmp.append((k, miRNA_ID[rst_dct[k].support_]))
-
-# xx = pd.concat(lst)
-# print(infotmp)    
-# for i, j in enumerate(xx.index):
-#     print(xx.loc[j], infotmp[i])
-
-# for i in infotmp:
-#     # print(i[0], end=" ")
-#     for j in i[1]:
-#         print(j, end=" ")
-#     print()
-
 
 mean_df, med_df = results_printer_v0(rst_dct, X_all, y_all, miRNA_ID)
     
