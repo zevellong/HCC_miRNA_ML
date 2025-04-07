@@ -54,13 +54,15 @@ clfs = {
         "XGB": XGBClassifier(max_depth=6, num_leaves=8, n_estimators=100, verbosity=0),
         "LGB": LGBMClassifier(n_estimators=100, verbosity=-1, boosting_type="goss", 
             max_depth=4, objective="binary", num_leaves=8, subsample=0.7,colsample_bytree=1.0),
-        "CB": CatBoostClassifier(n_estimators=100, logging_level='Silent',allow_writing_files=False),
+        "CB": CatBoostClassifier(n_estimators=200, logging_level='Silent',allow_writing_files=False, depth=5),
         }
 #"XGB": XGBClassifier(max_depth=3, n_estimators=100, verbosity=0, min_child_weight=0.2,
 # max_leaves=4, gamma=0.5, subsample=0.7, colsample_bytree=0.8), 
 # "LGB": LGBMClassifier(n_estimators=100, verbosity=-1, boosting_type="gbdt", reg_lambda=0.1, 
 # max_depth=3, objective="binary", num_leaves=8, subsample=0.7, colsample_bytree=0.9)
-
+#        "CB": CatBoostClassifier(n_estimators=200, logging_level='Silent',allow_writing_files=False, depth=6, 
+    # learning_rate=0.2, l2_leaf_reg=500, auto_class_weights="Balanced", random_strength=10, border_count = 50,
+    # bagging_temperature=100)
 scorings=("matthews_corrcoef",'f1', 'balanced_accuracy')
 
 def calc_clf_reward(X, y, support, clf, flen, flen_max, alpha=0.8, scoring="matthews_corrcoef", n_splits=5,
@@ -83,7 +85,7 @@ def calc_clf_reward(X, y, support, clf, flen, flen_max, alpha=0.8, scoring="matt
     # return (alpha * met_score + (1 - alpha) * flen_score), info
     return max(0, met_score - scocut) * (flen_score), info
 
-def print_clf_feas_met(support, X, y, clf, n_times=10, n_splits=10, shuf=True, params=None):
+def print_clf_feas_met(support, X, y, clf, n_times=10, n_splits=10, shuf=True, params=None, clf_imp=None):
     cv = StratifiedKFold(n_splits=n_splits, shuffle=shuf)
     scorings = {
                 "ACC": "accuracy",
@@ -94,8 +96,8 @@ def print_clf_feas_met(support, X, y, clf, n_times=10, n_splits=10, shuf=True, p
                 "Specificity": make_scorer(Specificity_score),
                 "AUC": "roc_auc"
         }
-       
-    clf_imp = copy.deepcopy(clfs[clf])
+    if clf_imp is None and clf in clfs.keys():
+        clf_imp = copy.deepcopy(clfs[clf])
     
     if params is not None:
         clf_imp.set_params(**params)
