@@ -12,7 +12,4 @@ This project includes code and analysis for detecting hepatocellular carcinoma (
 - Python 3.9
 - scikit-learn, catboost, xgboost, shap, pandas, numpy, matplotlib
 
-## Usage
-```bash
-python main.py
 
